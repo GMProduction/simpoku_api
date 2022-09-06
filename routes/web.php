@@ -29,10 +29,13 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         });
 
         $router->group(['prefix' => 'admin'], function () use ($router){
+
             $router->group(['prefix' => 'specialist'], function () use ($router){
                 $router->get('/', 'Admin\\SpecialistController@index');
                 $router->post('/', 'Admin\\SpecialistController@index');
             });
+
+
         });
     });
 });
