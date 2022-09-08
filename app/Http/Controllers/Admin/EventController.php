@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Helper\CustomController;
+use App\Helper\Rules;
 use App\Models\Event;
 
 class EventController extends CustomController
@@ -41,7 +42,12 @@ class EventController extends CustomController
             'latitude' => $this->postField('latitude'),
             'longitude' => $this->postField('longitude'),
         ];
-        Event::created($request);
-        return $this->jsonSuccessResponse('success');
+        if ($this->request->hasFile('image')) {
+            $disk = '/assets/image/events/';
+            $icon_name = $this->upload('image', $disk);
+            $request['image'] = $disk . $icon_name;
+        }
+        Event::create($request);
+        return $this->jsonSuccessResponse('success insert', $request);
     }
 }

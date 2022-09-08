@@ -35,6 +35,10 @@ $router->group(['prefix' => 'api'], function () use ($router) {
                 $router->post('/', 'Admin\\SpecialistController@index');
             });
 
+            $router->group(['prefix' => 'event'], function () use ($router){
+                $router->get('/', 'Admin\\EventController@index');
+                $router->post('/', 'Admin\\EventController@index');
+            });
 
         });
     });
