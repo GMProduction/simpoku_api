@@ -5,8 +5,9 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Helper\CustomController;
-use App\Helper\Rules;
+use App\Helper\ValidationRules;
 use App\Models\Event;
+use Illuminate\Support\Facades\Validator;
 
 class EventController extends CustomController
 {
@@ -32,6 +33,10 @@ class EventController extends CustomController
 
     private function post_new_event()
     {
+        $validator = Validator::make($this->request->all(), ValidationRules::EVENT_CREATE_RULE);
+        if ($validator->fails()) {
+            return $this->jsonBadRequestResponse('invalid request', $validator->errors());
+        }
         $request = [
             'specialist_id' => $this->postField('specialist'),
             'title' => ucwords(strtolower($this->postField('title'))),
@@ -44,6 +49,11 @@ class EventController extends CustomController
         ];
         if ($this->request->hasFile('image')) {
             $disk = '/assets/image/events/';
+            $icon_name = $this->upload('image', $disk);
+            $request['image'] = $disk . $icon_name;
+        }
+        if ($this->request->hasFile('announcement')) {
+            $disk = '/assets/announcement/events/';
             $icon_name = $this->upload('image', $disk);
             $request['image'] = $disk . $icon_name;
         }

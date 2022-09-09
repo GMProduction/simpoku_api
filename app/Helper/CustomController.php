@@ -6,6 +6,8 @@ namespace App\Helper;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 use Ramsey\Uuid\Uuid;
 
 
