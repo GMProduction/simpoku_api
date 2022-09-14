@@ -40,6 +40,14 @@ $router->group(['prefix' => 'api'], function () use ($router) {
                 $router->post('/', 'Admin\\EventController@index');
             });
 
+            $router->group(['prefix' => 'slider'], function () use ($router){
+                $router->get('/', 'Admin\\SliderController@index');
+                $router->post('/', 'Admin\\SliderController@index');
+                $router->get('/{id}', 'Admin\\SliderController@show');
+                $router->post('/{id}', 'Admin\\SliderController@show');
+                $router->post('/{id}/activate', 'Admin\\SliderController@activate');
+            });
+
         });
     });
 });

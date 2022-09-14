@@ -24,4 +24,14 @@ class ValidationRules
 //    const EVENT_CREATE_MESSAGES = [
 //        'specialist.re'
 //    ];
+
+    const SLIDER_CREATE_RULE = [
+        'image' => 'required|image',
+        'url' => 'required|url'
+    ];
+
+    const SLIDER_PATCH_RULE = [
+        'image' => 'image',
+        'url' => 'required|url'
+    ];
 }
