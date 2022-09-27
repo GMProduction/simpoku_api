@@ -28,19 +28,21 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->post('/sign-in', 'AuthController@login');
         });
 
-        $router->group(['prefix' => 'admin'], function () use ($router){
+        $router->group(['prefix' => 'admin'], function () use ($router) {
 
-            $router->group(['prefix' => 'specialist'], function () use ($router){
+            $router->group(['prefix' => 'specialist'], function () use ($router) {
                 $router->get('/', 'Admin\\SpecialistController@index');
                 $router->post('/', 'Admin\\SpecialistController@index');
             });
 
-            $router->group(['prefix' => 'event'], function () use ($router){
+            $router->group(['prefix' => 'event'], function () use ($router) {
                 $router->get('/', 'Admin\\EventController@index');
                 $router->post('/', 'Admin\\EventController@index');
+                $router->get('/{id}', 'Admin\\EventController@show');
+                $router->post('/{id}', 'Admin\\EventController@show');
             });
 
-            $router->group(['prefix' => 'slider'], function () use ($router){
+            $router->group(['prefix' => 'slider'], function () use ($router) {
                 $router->get('/', 'Admin\\SliderController@index');
                 $router->post('/', 'Admin\\SliderController@index');
                 $router->get('/{id}', 'Admin\\SliderController@show');

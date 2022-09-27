@@ -21,9 +21,18 @@ class ValidationRules
         'announcement' => 'file'
     ];
 
-//    const EVENT_CREATE_MESSAGES = [
-//        'specialist.re'
-//    ];
+    const EVENT_PATCH_RULE = [
+        'specialist' => 'required|exists:specialists,id',
+        'title' => 'required',
+        'description' => 'required',
+        'image' => 'image',
+        'start_at' => 'required',
+        'finish_at' => 'required',
+        'location' => 'required',
+        'latitude' => 'required|regex:/^(-)?[0-9]+(\.[0-9]{1,15})?$/',
+        'longitude' => 'required|regex:/^(-)?[0-9]+(\.[0-9]{1,15})?$/',
+        'announcement' => 'file'
+    ];
 
     const SLIDER_CREATE_RULE = [
         'image' => 'required|image',

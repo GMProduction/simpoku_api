@@ -132,6 +132,15 @@ class CustomController extends Controller
         return $icon;
     }
 
+    public function remove_file($file)
+    {
+        if($file !== null) {
+            if (storage_path($file)) {
+                unlink(storage_path($file));
+            }
+        }
+    }
+
     public function is_valid_decode_json($json_field = [])
     {
         foreach ($json_field as $key => $data) {
