@@ -51,6 +51,17 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             });
 
         });
+
+        //member endpoint
+        $router->group(['prefix' => 'slider'], function () use ($router) {
+            $router->get('/', 'Member\\SliderController@index');
+            $router->get('/{id}', 'Member\\SliderController@detail');
+        });
+
+        $router->group(['prefix' => 'event', 'middleware' => ['auth', 'member']], function () use ($router) {
+            $router->get('/', 'Member\\EventController@index');
+        });
+
     });
 });
 

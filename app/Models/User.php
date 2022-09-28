@@ -64,4 +64,9 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     {
         return $this->hasOne(Admin::class, 'user_id');
     }
+
+    public function specialists()
+    {
+        return $this->belongsToMany(Specialist::class, 'user_specialist');
+    }
 }
