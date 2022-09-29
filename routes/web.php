@@ -24,8 +24,14 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     //version 1
     $router->group(['prefix' => 'v1'], function () use ($router) {
         $router->group(['prefix' => 'auth'], function () use ($router) {
-            $router->post('/sign-up', 'AuthController@register');
-            $router->post('/sign-in', 'AuthController@login');
+            $router->group(['prefix' => 'member'], function () use ($router){
+                $router->post('/sign-up', 'AuthController@sign_up_member');
+                $router->post('/sign-in', 'AuthController@sing_in_member');
+            });
+
+            $router->group(['prefix' => 'admin'], function () use ($router){
+                $router->post('/sign-in', 'AuthController@login');
+            });
         });
 
         $router->group(['prefix' => 'admin'], function () use ($router) {
@@ -60,6 +66,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
         $router->group(['prefix' => 'event', 'middleware' => ['auth', 'member']], function () use ($router) {
             $router->get('/', 'Member\\EventController@index');
+            $router->get('/{id}', 'Member\\EventController@detail');
+            $router->post('/{id}', 'Member\\EventController@detail');
         });
 
     });

@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 
 
 use App\Helper\CustomController;
+use App\Helper\ValidationRules;
 use App\Models\Admin;
 use App\Models\Member;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends CustomController
 {
@@ -18,15 +20,13 @@ class AuthController extends CustomController
         parent::__construct();
     }
 
-    public function login()
+    //sign in member
+    public function sing_in_member()
     {
         try {
             $email = $this->postField('email');
             $password = $this->postField('password');
-            $role = $this->postField('role');
-            if (!$this->check_role($role)) {
-                return $this->jsonBadRequestResponse('invalid role format');
-            }
+            $role = 'member';
             $user = User::with($role)
                 ->whereJsonContains('roles', $role)
                 ->where('email', '=', $email)
@@ -47,37 +47,39 @@ class AuthController extends CustomController
         }
     }
 
-    public function register()
+    //sign up member
+    public function sign_up_member()
     {
         DB::beginTransaction();
         try {
-            $role = $this->postField('role');
-            if (!$this->check_role($role)) {
-                return $this->jsonBadRequestResponse('invalid role format');
+            $validator = Validator::make($this->request->all(), ValidationRules::REGISTER_RULE);
+            $errors_response = $validator->errors()->toArray();
+            $specialists = json_decode($this->postField('specialists'));
+            $validator_specialists_fails = false;
+            if ($specialists === null || !is_array($specialists)) {
+                $validator_specialists_fails = true;
+            }
+            if ($validator->fails() || $validator_specialists_fails) {
+                if ($validator_specialists_fails) {
+                    $errors_response['specialists'] = ['invalid specialist format'];
+                }
+                return $this->jsonBadRequestResponse('invalid request', $errors_response);
             }
             $user_data = [
                 'username' => $this->postField('username'),
                 'email' => $this->postField('email'),
                 'password' => $this->postField('password') !== null ? Hash::make($this->postField('password')) : null,
-                'roles' => $role === 'admin' ? ['member'] : ['admin'],
+                'roles' => ['member'],
             ];
             $user = User::create($user_data);
-            if ($role === 'admin') {
-                $admin_data = [
-                    'user_id' => $user->id,
-                    'name' => $this->postField('name')
-                ];
-                Admin::create($admin_data);
-            } else {
-                $member_data = [
-                    'user_id' => $user->id,
-                    'name' => $this->postField('name'),
-                    'phone' => $this->postField('phone')
-                ];
-                Member::create($member_data);
-            }
-
-            $access_token = $this->generateTokenById($user->id, $role);
+            $member_data = [
+                'user_id' => $user->id,
+                'name' => $this->postField('name'),
+                'phone' => $this->postField('phone')
+            ];
+            Member::create($member_data);
+            $user->specialists()->attach($specialists);
+            $access_token = $this->generateTokenById($user->id, 'member');
             DB::commit();
             return $this->jsonSuccessResponse('success', [
                 'access_token' => $access_token

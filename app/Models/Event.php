@@ -23,7 +23,8 @@ class Event extends Model
         'location',
         'latitude',
         'longitude',
-        'announcement'
+        'announcement',
+        'price',
     ];
 
     public function specialist()

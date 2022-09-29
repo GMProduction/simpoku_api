@@ -8,6 +8,14 @@ use Illuminate\Validation\Rule;
 
 class ValidationRules
 {
+    const REGISTER_RULE = [
+        'email' => 'required|email|unique:users',
+        'password' => 'required|min:8',
+        'name' => 'required|max:255',
+        'username' => 'required|max:255|unique:users',
+    ];
+
+
     const EVENT_CREATE_RULE = [
         'specialist' => 'required|exists:specialists,id',
         'title' => 'required',

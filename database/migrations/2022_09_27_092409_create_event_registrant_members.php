@@ -15,12 +15,12 @@ class CreateEventRegistrantMembers extends Migration
     {
         Schema::create('event_registrant_members', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('event_registrant__id');
+            $table->uuid('event_registrant_id');
             $table->string('code');
             $table->string('name');
             $table->string('phone');
             $table->timestamps();
-            $table->foreign('event_registrant__id')->references('id')->on('event_registrants');
+            $table->foreign('event_registrant_id')->references('id')->on('event_registrants');
         });
     }
 
